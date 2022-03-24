@@ -62,13 +62,13 @@ namespace Revit_API_5_2
             }
             catch (OperationCanceledException)
             {
-                //TaskDialog.Show("Отмена", "Команда прервана пользователем.");
+                //TaskDialog.Show("Отмена", "Команда была прервана пользователем.");
                 return Result.Cancelled;
             }
             catch
             {
-                //TaskDialog.Show("Отмена", "Команда прервана пользователем.");
-                return Result.Cancelled;
+                TaskDialog.Show("Ошибка", "При выполнении команды возникла непредвиденная ошибка.");
+                return Result.Failed;
             }
 
             MainView window = new MainView(commandData);
