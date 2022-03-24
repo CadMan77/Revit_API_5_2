@@ -25,6 +25,10 @@ namespace Revit_API_5_2
 
         {
             InitializeComponent();
+            MainViewViewModel vm = new MainViewViewModel(commandData);
+            vm.CloseRequest += (s, e) => this.Close(); // ??
+
+            DataContext = vm;
         }
     }
 }

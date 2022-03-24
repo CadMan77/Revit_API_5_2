@@ -10,9 +10,16 @@ namespace Revit_API_5_2
 {
     public class MainViewViewModel
     {
-        private ExternalCommandData _commandData;
+        private ExternalCommandData _commandData;        
 
         public DelegateCommand SetWallTypeCommand { get; }
+
+        public event EventHandler CloseRequest;
+        
+        private void RaiseCloseRequest() // ??
+        {
+            CloseRequest?.Invoke(this, EventArgs.Empty);
+        }
 
         public MainViewViewModel(ExternalCommandData commandData)
         {
