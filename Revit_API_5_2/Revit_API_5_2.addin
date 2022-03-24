@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+	<AddIn Type="Command">
+		<Assembly>"C:\ProgramData\RevitAPITraining\Revit_API_5_2.dll"</Assembly>
+		<AddInId>EB7B8F6E-DB95-40D2-8DF9-0C94B6F57720</AddInId>
+		<FullClassName>Revit_API_5_2.Main</FullClassName>
+		<VendorId>ADSK</VendorId>
+		<Text>RevitAPI 5-2 Изменение типа стен (WPF, список, кнопка)</Text>
+	</AddIn>
+</RevitAddIns>
