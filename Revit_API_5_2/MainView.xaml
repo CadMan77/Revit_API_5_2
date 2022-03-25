@@ -6,11 +6,11 @@
              xmlns:local="clr-namespace:Revit_API_5_2"
              mc:Ignorable="d" 
              Height="135" Width="400" MinHeight ="135" MinWidth="400"
-             Title="Тип выбранных стен">
+             Title="Изменение типа стен">
     <StackPanel Margin="2">
-        <Label Content="Типы стен проекта:" />
+        <Label Content="Выберите новый тип для выбранных стен:" />
         <ComboBox Name="ProjectWallTypes" ItemsSource="{Binding WallTypeNames}"
-                  SelectedItem="{Binding SelectedWallType}"/>
-        <Button Content="Изменить тип" Margin="15" Padding="5"/>
+                  SelectedItem="{Binding SelectedWallTypeName}"/>
+        <Button Content="Изменить тип" Margin="15" Padding="5" Command="{Binding SetWallTypeCommand}"/>
     </StackPanel>
 </Window>

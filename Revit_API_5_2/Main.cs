@@ -18,8 +18,7 @@ namespace Revit_API_5_2
 
     public class Main : IExternalCommand
     {
-        //public List<Element> SelectedWalls { get; set; }
-        public List<string> WallTypeNames { get; set; }
+        public List<Element> SelectedWalls { get; set; }
 
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
@@ -28,26 +27,10 @@ namespace Revit_API_5_2
             UIDocument uidoc = uiapp.ActiveUIDocument;
             Document doc = uidoc.Document;
 
-            List<WallType> wallTypes = new FilteredElementCollector(doc)
-                .OfCategory(BuiltInCategory.OST_Walls)
-                .WhereElementIsElementType()
-                .Cast<WallType>()
-                .ToList();
-
-            List<string> wallTypeNames = new List<string>();
-
-            foreach (WallType wallType in wallTypes)
-            {
-                wallTypeNames.Add(wallType.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_NAME).AsString());
-            }
-
-            WallTypeNames = wallTypeNames;
-
             try
             {
-                uidoc.RefreshActiveView();
                 IList<Reference> selectedWallRefList = uidoc.Selection.PickObjects(ObjectType.Element, new WallFilter(), "Выберите стены:");
-
+                #region // multi-line variant
                 //List<Wall> selectedWalls = new List<Wall>();
 
                 //foreach (Reference selectedRef in selectedWallRefList)
@@ -56,23 +39,31 @@ namespace Revit_API_5_2
                 //    selectedWalls.Add(oWall);
                 //}
 
-                List<Element> selectedWalls = selectedWallRefList.Select(selectedObject => doc.GetElement(selectedObject)).ToList();
-                //SelectedWalls = selectedWallRefList.Select(selectedObject => doc.GetElement(selectedObject)).ToList();
+                //List<Element> selectedWalls = selectedWallRefList.Select(selectedObject => doc.GetElement(selectedObject)).ToList();
+                //SelectedWalls = selectedWalls;
+                #endregion
+                SelectedWalls = selectedWallRefList.Select(selectedObject => doc.GetElement(selectedObject)).ToList();
 
             }
-            catch (OperationCanceledException)
+            catch (OperationCanceledException) // ??
             {
                 //TaskDialog.Show("Отмена", "Команда была прервана пользователем.");
                 return Result.Cancelled;
             }
-            catch
+            catch (Exception ex)
             {
-                TaskDialog.Show("Ошибка", "При выполнении команды возникла непредвиденная ошибка.");
+                //TaskDialog.Show("Ошибка", "При выполнении команды возникла непредвиденная ошибка.");
+                TaskDialog.Show("Ошибка", $"{ex.Message}");
                 return Result.Failed;
             }
 
             MainView window = new MainView(commandData);
             window.ShowDialog();
+            //TaskDialog.Show("Завершено", $"Тип выбранных стен ({SelectedWalls.Count} шт.) успешно изменен на \"{SelectedWallTypeName}\".");
+            TaskDialog.Show("Завершено", $"Тип выбранных стен ({SelectedWalls.Count} шт.) успешно изменен.");
+
+            uidoc.Selection.Dispose();
+            uidoc.RefreshActiveView();
             return Result.Succeeded;
         }
     }
